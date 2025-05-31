@@ -1,0 +1,55 @@
+---
+name: build
+
+on:
+  workflow_call: {}
+  workflow_dispatch: {}
+
+jobs:
+  build-launcher-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build launcher image
+        run: |
+          docker build -f launcher/Dockerfile launcher/ -t ghcr.io/scrapli/scrapli_clab/launcher:dev-latest
+
+      - name: push builder (dev) image to ghcr
+        run: |
+          docker push ghcr.io/scrapli/scrapli_clab/launcher:dev-latest
+
+  build-netopeer-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build netopeer image
+        run: |
+          docker build -f netopeer/Dockerfile netopeer/ -t ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest
+
+      - name: push netopeer (dev) image to ghcr
+        run: |
+          docker push ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest

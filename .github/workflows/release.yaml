@@ -1,0 +1,80 @@
+---
+name: release
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  release-launcher-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: set release version
+        run: |
+          RELEASE_TAG=${{ github.ref_name }}
+          RELEASE_VERSION=${RELEASE_TAG#v}
+
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> "$GITHUB_ENV"
+
+      - name: set netopeer image to match launcher image
+        run: |
+          sed -i 's|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|' launcher/topos/topo.amd64.yaml
+          sed -i 's|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|' launcher/topos/topo.arm64.yaml
+          sed -i 's|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|' launcher/topos/topo.ci.amd64.yaml
+
+      - name: build launcher image
+        run: |
+          docker build -f launcher/Dockerfile launcher/ -t ghcr.io/scrapli/scrapli_clab/launcher:${{ env.RELEASE_VERSION }}
+
+      - name: tag and push launcher image to ghcr
+        run: |
+          docker tag ghcr.io/scrapli/libscrapli/launcher:${{ env.RELEASE_VERSION }} ghcr.io/scrapli/libscrapli/launcher:latest
+          docker push ghcr.io/scrapli/libscrapli/launcher:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/scrapli/libscrapli/launcher:latest
+
+  release-netopeer-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: set release version
+        run: |
+          RELEASE_TAG=${{ github.ref_name }}
+          RELEASE_VERSION=${RELEASE_TAG#v}
+
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> "$GITHUB_ENV"
+
+      - name: build netopeer image
+        run: |
+          docker build -f netopeer/Dockerfile netopeer/ -t ghcr.io/scrapli/scrapli_clab/netopeer:${{ env.RELEASE_VERSION }}
+
+      - name: tag and push netopeer image to ghcr
+        run: |
+          docker tag ghcr.io/scrapli/libscrapli/netopeer:${{ env.RELEASE_VERSION }} ghcr.io/scrapli/libscrapli/netopeer:latest
+          docker push ghcr.io/scrapli/libscrapli/netopeer:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/scrapli/libscrapli/netopeer:latest
