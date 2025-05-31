@@ -22,13 +22,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: build launcher image
-        run: |
-          docker build -f launcher/Dockerfile launcher/ -t ghcr.io/scrapli/scrapli_clab/launcher:dev-latest
+      - name: enable containerd image store
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "debug": true,
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
 
-      - name: push builder (dev) image to ghcr
-        run: |
-          docker push ghcr.io/scrapli/scrapli_clab/launcher:dev-latest
+      - name: qemu for emulation support
+        uses: docker/setup-qemu-action@v3
+
+      - name: build and push launcher image
+        uses: docker/build-push-action@v6
+        with:
+          context: launcher
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ghcr.io/scrapli/scrapli_clab/launcher:dev-latest
 
   build-netopeer-image:
     runs-on: ubuntu-latest
@@ -46,10 +60,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: build netopeer image
-        run: |
-          docker build -f netopeer/Dockerfile netopeer/ -t ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest
+      - name: enable containerd image store
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "debug": true,
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
 
-      - name: push netopeer (dev) image to ghcr
-        run: |
-          docker push ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest
+      - name: qemu for emulation support
+        uses: docker/setup-qemu-action@v3
+
+      - name: build and push launcher image
+        uses: docker/build-push-action@v6
+        with:
+          context: netopeer
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest
