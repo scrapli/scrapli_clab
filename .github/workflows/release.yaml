@@ -42,9 +42,9 @@ jobs:
 
       - name: tag and push launcher image to ghcr
         run: |
-          docker tag ghcr.io/scrapli/libscrapli/launcher:${{ env.RELEASE_VERSION }} ghcr.io/scrapli/libscrapli/launcher:latest
-          docker push ghcr.io/scrapli/libscrapli/launcher:${{ env.RELEASE_VERSION }}
-          docker push ghcr.io/scrapli/libscrapli/launcher:latest
+          docker tag ghcr.io/scrapli/scrapli_clab/launcher:${{ env.RELEASE_VERSION }} ghcr.io/scrapli/scrapli_clab/launcher:latest
+          docker push ghcr.io/scrapli/scrapli_clab/launcher:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/scrapli/scrapli_clab/launcher:latest
 
   release-netopeer-image:
     runs-on: ubuntu-latest
@@ -75,6 +75,6 @@ jobs:
 
       - name: tag and push netopeer image to ghcr
         run: |
-          docker tag ghcr.io/scrapli/libscrapli/netopeer:${{ env.RELEASE_VERSION }} ghcr.io/scrapli/libscrapli/netopeer:latest
-          docker push ghcr.io/scrapli/libscrapli/netopeer:${{ env.RELEASE_VERSION }}
-          docker push ghcr.io/scrapli/libscrapli/netopeer:latest
+          docker tag ghcr.io/scrapli/scrapli_clab/netopeer:${{ env.RELEASE_VERSION }} ghcr.io/scrapli/scrapli_clab/netopeer:latest
+          docker push ghcr.io/scrapli/scrapli_clab/netopeer:${{ env.RELEASE_VERSION }}
+          docker push ghcr.io/scrapli/scrapli_clab/netopeer:latest
