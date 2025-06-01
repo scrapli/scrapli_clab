@@ -32,9 +32,12 @@ jobs:
 
       - name: set netopeer image to match launcher image
         run: |
-          sed -i 's|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|' launcher/topos/topo.amd64.yaml
-          sed -i 's|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|' launcher/topos/topo.arm64.yaml
-          sed -i 's|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|' launcher/topos/topo.ci.amd64.yaml
+          sed -i "s|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|" launcher/topos/topo.amd64.yaml
+          cat launcher/topos/topo.amd64.yaml | grep netopeer
+          sed -i "s|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|" launcher/topos/topo.arm64.yaml
+          cat launcher/topos/topo.arm64.yaml | grep netopeer
+          sed -i "s|\(image: ghcr.io/scrapli/scrapli_clab/netopeer:\).*|\1${{ env.RELEASE_VERSION }}|" launcher/topos/topo.ci.amd64.yaml
+          cat launcher/topos/topo.ci.amd64.yaml | grep netopeer
 
       - name: enable containerd image store
         uses: docker/setup-docker-action@v4
