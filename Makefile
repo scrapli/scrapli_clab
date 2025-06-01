@@ -25,17 +25,7 @@ build-launcher: ## Builds the clab launcher image
 build: build-netopeer-server build-launcher ## build both netopeer and the launcher
 
 run: ## Runs the clab launcher
-	docker network rm clab || true
-	docker network create \
-		--driver bridge \
-		--subnet=172.20.20.0/24 \
-		--gateway=172.20.20.1 \
-		--ipv6 \
-		--subnet=2001:172:20:20::/64 \
-		--gateway=2001:172:20:20::1 \
-		--opt com.docker.network.driver.mtu=65535 \
-		--label containerlab \
-		clab
+	rm -r .clab/*
 	docker run \
 		--rm \
 		--name clab-launcher \
