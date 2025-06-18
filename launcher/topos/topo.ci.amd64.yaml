@@ -25,3 +25,8 @@ topology:
       image: ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest
       mgmt-ipv4: 172.20.20.18
       mgmt-ipv6: 2001:172:20:20::18
+    jumper:
+      kind: linux
+      image: ghcr.io/scrapli/scrapli_clab/jumper:dev-latest
+      mgmt-ipv4: 172.20.20.19
+      mgmt-ipv6: 2001:172:20:20::19

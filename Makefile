@@ -10,6 +10,12 @@ fmt: ## Run formatters
 lint: ## Run linters
 	python -m ruff check
 
+build-jumper: ## Builds the jumper (proxy jump ssh) server image
+	docker build \
+		-f jumper/Dockerfile \
+		-t ghcr.io/scrapli/scrapli_clab/jumper:dev-latest \
+		jumper
+
 build-netopeer-server: ## Builds the netopeer server image
 	docker build \
 		-f netopeer/Dockerfile \
@@ -22,10 +28,21 @@ build-launcher: ## Builds the clab launcher image
 		-t ghcr.io/scrapli/scrapli_clab/launcher:dev-latest \
 		launcher
 
-build: build-netopeer-server build-launcher ## build both netopeer and the launcher
+build: build-jumper build-netopeer-server build-launcher ## build both netopeer and the launcher
 
 run: ## Runs the clab launcher
-	rm -r .clab/*
+	rm -r .clab/* || true
+	docker network rm clab || true
+	docker network create \
+		--driver bridge \
+		--subnet=172.20.20.0/24 \
+		--gateway=172.20.20.1 \
+		--ipv6 \
+		--subnet=2001:172:20:20::/64 \
+		--gateway=2001:172:20:20::1 \
+		--opt com.docker.network.driver.mtu=65535 \
+		--label containerlab \
+		clab
 	docker run \
 		--rm \
 		--name clab-launcher \

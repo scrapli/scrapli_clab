@@ -1,0 +1,11 @@
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+PermitRootLogin no
+PasswordAuthentication yes
+PubkeyAuthentication yes
+
+UsePAM yes
+UseDNS no

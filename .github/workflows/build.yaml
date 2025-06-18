@@ -74,10 +74,48 @@ jobs:
       - name: qemu for emulation support
         uses: docker/setup-qemu-action@v3
 
-      - name: build and push launcher image
+      - name: build and push netopeer image
         uses: docker/build-push-action@v6
         with:
           context: netopeer
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ghcr.io/scrapli/scrapli_clab/netopeer:dev-latest
+
+  build-jumper-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: enable containerd image store
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "debug": true,
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+
+      - name: qemu for emulation support
+        uses: docker/setup-qemu-action@v3
+
+      - name: build and push jumper image
+        uses: docker/build-push-action@v6
+        with:
+          context: jumper
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ghcr.io/scrapli/scrapli_clab/jumper:dev-latest
