@@ -25,6 +25,10 @@ class Launcher:
         self.workdir = os.getenv(WORKDIR_ENV, "/launcher")
 
         self.topo = os.getenv(TOPO_ENV, "topo.amd64.yaml")
+        if "x86_64" in self.topo:
+            # uname may be x86_64, which for us means amd64
+            self.topo = self.topo.replace("x86_64", "amd64")
+
         if os.getenv(HOST_ARCH_ENV, "") == "arm64":
             self.topo = os.getenv(TOPO_ENV, "topo.arm64.yaml")
 
