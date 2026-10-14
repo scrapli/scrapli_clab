@@ -68,7 +68,8 @@ RUN ldconfig && \
     make && \
     make install
 
-RUN /build/venv/bin/python3 -m pip install sysrepo==1.7.5
+# libyang bindings must match the libyang c lib built above (3.x); sysrepo leaves it unpinned
+RUN /build/venv/bin/python3 -m pip install libyang==3.1.0 sysrepo==1.7.5
 
 COPY yang /yang
 WORKDIR /yang
