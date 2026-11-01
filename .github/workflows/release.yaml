@@ -51,7 +51,7 @@ jobs:
             }
 
       - name: qemu for emulation support
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: build and push launcher image
         uses: docker/build-push-action@v6
@@ -98,7 +98,7 @@ jobs:
             }
 
       - name: qemu for emulation support
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: build and push netopeer image
         uses: docker/build-push-action@v6
@@ -145,7 +145,7 @@ jobs:
             }
 
       - name: qemu for emulation support
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: build and push jumper image
         uses: docker/build-push-action@v6
