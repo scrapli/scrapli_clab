@@ -54,7 +54,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       - name: build and push launcher image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: launcher
           push: true
@@ -101,7 +101,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       - name: build and push netopeer image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: netopeer
           push: true
@@ -148,7 +148,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       - name: build and push jumper image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: jumper
           push: true
